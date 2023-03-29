@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package ra2yrproto.commands;
+
+import "ra2yrproto/ra2yr.proto";
+
+enum UnitAction {
+  ACTION_NONE = 0;
+  ACTION_DEPLOY = 1;
+  ACTION_SELECT = 2;
+  ACTION_UNSELECT = 3;
+  ACTION_TRY_TO_DEPLOY = 4;
+  ACTION_SELL = 5;
+}
+
+message CreateHooks {
+  message Args {
+    bool no_suspend_threads = 1;
+  }
+  message Result {}
+  Args args = 1;
+  Result result = 2;
+}
+
+message CreateCallbacks {
+  message Args {}
+  message Result {}
+  Args args = 1;
+  Result result = 2;
+}
+
+message GetGameState {
+  message Args {}
+  message Result {
+    ra2yrproto.ra2yr.GameState state = 1;
+  }
+  Args args = 1;
+  Result result = 2;
+}
+
+message StorageValue {
+  ra2yrproto.ra2yr.GameState game_state = 1;
+  ra2yrproto.ra2yr.MapData map_data = 2;
+  ra2yrproto.ra2yr.GameState initial_game_state = 3;
+  ra2yrproto.ra2yr.EventListsSnapshot event_buffer = 4;
+  ra2yrproto.ra2yr.MapDataSoA map_data_soa = 5;
+}
+
+message ReadValue {
+  message Args {
+    StorageValue data = 1;
+  }
+  message Result {
+    StorageValue data = 1;
+  }
+  Args args = 1;
+  Result result = 2;
+}
+
+message DeployUnits {
+  message Args {
+    repeated uint32 object_addresses = 1;
+  }
+  message Result {}
+  Args args = 1;
+  Result result = 2;
+}
+
+message UnitCommand {
+  message Args {
+    repeated uint32 object_addresses = 1;
+    UnitAction action = 2;
+  }
+  message Result {}
+  Args args = 1;
+  Result result = 2;
+}
+
+message ClickEvent {
+  message Args {
+    repeated uint32 object_addresses = 1;
+    ra2yrproto.ra2yr.NetworkEvent event = 2;
+  }
+  message Result {}
+  Args args = 1;
+  Result result = 2;
+}
+
+message MissionClicked {
+  message Args {
+    repeated uint32 object_addresses = 1;
+    ra2yrproto.ra2yr.Mission event = 2;
+    uint32 target_object = 3;
+    ra2yrproto.ra2yr.Coordinates coordinates = 4;
+  }
+  message Result {}
+  Args args = 1;
+  Result result = 2;
+}
+
+message Configuration {
+  bool debug_log = 1;
+  string record_filename = 2;
+}
+
+message InspectConfiguration {
+  message Args {
+    Configuration config = 1;
+  }
+  message Result {
+    Configuration config = 1;
+  }
+  Args args = 1;
+  Result result = 2;
+}
+
+message AddEvent {
+  message Args {
+    ra2yrproto.ra2yr.Event event = 1;
+  }
+  message Result {
+    ra2yrproto.ra2yr.Event event = 1;
+  }
+  Args args = 1;
+  Result result = 2;
+}
+
+// Return coordinates where the input building can be placed
+message PlaceQuery {
+  message Args {
+    uint32 type_class = 1;
+    uint32 house_class = 2;  // if empty, assume current player
+    repeated ra2yrproto.ra2yr.Coordinates coordinates = 3;
+  }
+  message Result {
+    repeated ra2yrproto.ra2yr.Coordinates coordinates = 2;
+  }
+  Args args = 1;
+  Result result = 2;
+}
+
+message AddMessage {
+  message Args {
+    string message = 1;
+    uint32 duration_frames = 2;
+    ra2yrproto.ra2yr.ColorScheme color = 3;
+  }
+  message Result {}
+  Args args = 1;
+  Result result = 2;
+}

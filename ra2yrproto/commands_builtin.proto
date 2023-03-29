@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package ra2yrproto.commands;
+
+import "google/protobuf/any.proto";
+import "ra2yrproto/ra2yr.proto";
+import "ra2yrproto/core.proto";
+
+message GetSystemState {
+  message Args {}
+  message Result {
+    ra2yrproto.SystemState state = 1;
+  }
+  Args args = 1;
+  Result result = 2;
+}
+
+message InstallHook {
+  message Args {
+    string name = 1;
+    uint64 address = 2;
+    uint32 code_length = 3;
+  }
+  message Result {}
+  Args args = 1;
+  Result result = 2;
+}
+
+message AddCallback {
+  message Args {
+    uint64 hook_address = 1;
+    uint64 callback_address = 2;
+  }
+  message Result {}
+  Args args = 1;
+  Result result = 2;
+}
+
+message StoreValue {
+  message Args {
+    string key = 1;
+    string value = 2;
+  }
+  message Result {
+    string result = 1;
+  }
+  Args args = 1;
+  Result result = 2;
+}
+
+message GetValue {
+  message Args {
+    string key = 1;
+  }
+  message Result {
+    string result = 1;
+  }
+  Args args = 1;
+  Result result = 2;
+}
+
+message HookableCommand {
+  message Args {}
+
+  message Result {
+    uint64 address_test_function = 1;
+    uint32 code_size = 2;
+    uint64 address_test_callback = 3;
+  }
+  Args args = 1;
+  Result result = 2;
+}
